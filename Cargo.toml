@@ -1,0 +1,6 @@
+[package]
+name = "half16equiv"
+version = "0.1.0"
+authors = ["Mark Stanislaw Baranowski <mark.s.baranowski@gmail.com>"]
+
+[dependencies]
