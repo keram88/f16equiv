@@ -1,6 +1,6 @@
 #! /bin/bash
 
-HALF_PATH="/home/vagrant/.cargo/registry/src/github.com-1ecc6299db9ec823/half-1.3.0"
+HALF_PATH="$HOME/.cargo/registry/src/github.com-1ecc6299db9ec823/half-1.3.0"
 OUTPUT_DIR="files"
 CRATE="tst"
 OTHER_BCS=""
@@ -10,9 +10,12 @@ EXTRA_RUSTC='-A unused-imports -C opt-level=0 -C no-prepopulate-passes -g --emit
 ##################################
 
 # Run cargo to populate dependencies
-cargo build > /dev/null 2>&1
 
-mkdir files > /dev/null 2>&1
+mkdir $OUTPUT_DIR > /dev/null 2>&1
+
+set -e
+
+cargo build #> /dev/null 2>&1
 
 rustc $EXTRA_RUSTC --crate-name half $HALF_PATH/src/lib.rs --crate-type lib -g --out-dir $OUTPUT_DIR --emit=dep-info,link
 
