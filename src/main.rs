@@ -10,8 +10,8 @@ extern "C" {
 }
 
 fn main() {
-  let x = 3;
-  let y = 7;
+  let x: u16 = 3.nondet();
+  let y: u16 = 7.nondet();
   let z = unsafe { f16_gt(x, y) };
-  println!("Hello, world!");
+  assert!(z == 2);
 }
