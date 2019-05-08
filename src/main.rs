@@ -1,3 +1,7 @@
+#[macro_use]
+mod smack;
+use smack::*;
+
 extern crate half;
 
 #[link(name = "chalf")]

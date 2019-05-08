@@ -3,7 +3,6 @@
 HALF_PATH="$HOME/.cargo/registry/src/github.com-1ecc6299db9ec823/half-1.3.0"
 OUTPUT_DIR="files"
 CRATE="tst"
-OTHER_BCS="$OUTPUT_DIR/chalf.bc"
 
 ########## Don't Change ##########
 EXTRA_RUSTC='-A unused-imports -C opt-level=0 -C no-prepopulate-passes -g --emit=llvm-bc --cfg verifier="smack"'
@@ -13,6 +12,7 @@ CLANG_ARGS='-c -emit-llvm -O0 -g -gcolumn-info -I/usr/local/share/smack/include 
 # Run cargo to populate dependencies
 
 mkdir $OUTPUT_DIR > /dev/null 2>&1
+ln -s /usr/local/share/smack/lib/smack.rs src/smack.rs > /dev/null 2>&1
 
 set -e
 
@@ -20,13 +20,13 @@ set -e
 gcc -shared -fPIC -Wl,-soname,libchalf.so -o $OUTPUT_DIR/libchalf.so cbits/chalf.c
 #clang -shared -o $OUTPUT_DIR/libchalf.so cbits/chalf.c
 clang $CLANG_ARGS -DSMACK_ENABLED cbits/chalf.c -o $OUTPUT_DIR/chalf.bc
-
 export LD_LIBRARY_PATH=`pwd`/$OUTPUT_DIR:$LD_LIBRARY_PATH
 export LIBRARY_PATH=`pwd`/$OUTPUT_DIR:$LIBRARY_PATH
+
 cargo build #> /dev/null 2>&1
 
 rustc $EXTRA_RUSTC --crate-name half $HALF_PATH/src/lib.rs --crate-type lib -g --out-dir $OUTPUT_DIR --emit=dep-info,link
 rustc $EXTRA_RUSTC --crate-name $CRATE src/main.rs --crate-type bin -g --out-dir $OUTPUT_DIR --emit=dep-info,link  --extern half=./target/debug/deps/libhalf-d8c98ac24eff6c31.rlib
 
-llvm-link $OUTPUT_DIR/$CRATE.bc $OUTPUT_DIR/half.bc $BCS -o $OUTPUT_DIR/f16equiv.bc
+llvm-link $OUTPUT_DIR/$CRATE.bc $OUTPUT_DIR/half.bc $OUTPUT_DIR/chalf.bc -o $OUTPUT_DIR/f16equiv.bc
 llvm-dis $OUTPUT_DIR/f16equiv.bc > $OUTPUT_DIR/f16equiv.ll
