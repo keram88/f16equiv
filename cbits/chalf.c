@@ -1,3 +1,5 @@
+//#define SMACK_ENABLED
+
 #ifdef SMACK_ENABLED
 #include "smack.h"
 #endif
@@ -31,7 +33,7 @@ DEF_PRED(gt)
 DEF_PRED(leq)
 DEF_PRED(geq)
 
-//int main(void) {
-//  __VERIFIER_assert(f16_gt(2,1) != 0);
-//  return 0;
-//}
+/*int main(void) {
+  __VERIFIER_assert(f16_lt(0,16384) == 0);
+  return 0;
+  }*/

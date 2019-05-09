@@ -25,9 +25,11 @@ export LIBRARY_PATH=`pwd`/$OUTPUT_DIR:$LIBRARY_PATH
 
 cargo build #> /dev/null 2>&1
 
-rustc $EXTRA_RUSTC --crate-name half $HALF_PATH/src/lib.rs --crate-type lib -g --out-dir $OUTPUT_DIR --emit=dep-info,link
+rustc $EXTRA_RUSTC --crate-name half $HALF_PATH/src/lib.rs --crate-type lib -g -C metadata=d8c98ac24eff6c31 --out-dir ./target/debug/deps/ --emit=dep-info,link
+cp ./target/debug/deps/half.bc files/
+
 #rustc $EXTRA_RUSTC --crate-name $CRATE src/main.rs --crate-type bin -g --out-dir $OUTPUT_DIR --emit=dep-info,link  --extern half=./target/debug/deps/libhalf-d8c98ac24eff6c31.rlib
-rustc $EXTRA_RUSTC --crate-name $CRATE src/main.rs -g --out-dir $OUTPUT_DIR --extern half=./target/debug/deps/libhalf-d8c98ac24eff6c31.rlib
+rustc $EXTRA_RUSTC --crate-name $CRATE src/main.rs -g -C metadata=fdf0e253751e7ecc --out-dir $OUTPUT_DIR --extern half=./target/debug/deps/libhalf-d8c98ac24eff6c31.rlib
 
 llvm-link $OUTPUT_DIR/$CRATE.bc $OUTPUT_DIR/half.bc $OUTPUT_DIR/chalf.bc -o $OUTPUT_DIR/f16equiv.bc
 llvm-dis $OUTPUT_DIR/f16equiv.bc > $OUTPUT_DIR/f16equiv.ll
