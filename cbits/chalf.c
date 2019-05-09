@@ -30,8 +30,8 @@ RES f16_ ## pred(f16 x, f16 y) {\
 
 DEF_PRED(lt)
 DEF_PRED(gt)
-DEF_PRED(leq)
-DEF_PRED(geq)
+DEF_PRED(le)
+DEF_PRED(ge)
 
 /*int main(void) {
   __VERIFIER_assert(f16_lt(0,16384) == 0);
