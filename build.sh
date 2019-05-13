@@ -31,4 +31,4 @@ rustc $EXTRA_RUSTC --crate-name $CRATE src/main.rs -g -C metadata=fdf0e253751e7e
 llvm-link $OUTPUT_DIR/$CRATE.bc $OUTPUT_DIR/half.bc $OUTPUT_DIR/chalf.bc -o $OUTPUT_DIR/f16equiv.bc
 llvm-dis $OUTPUT_DIR/f16equiv.bc > $OUTPUT_DIR/f16equiv.ll
 
-smack --float --bit-precise --no-memory-splitting $OUTPUT_DIR/f16equiv.ll
+time smack --float --bit-precise --no-memory-splitting $OUTPUT_DIR/f16equiv.ll -bpl $OUTPUT_DIR/f16equiv.bpl --verifier=boogie

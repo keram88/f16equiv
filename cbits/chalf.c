@@ -12,6 +12,18 @@ RES __VERIFIER_nondet_unsigned_char() {
   return 0;
 }
 
+float __VERIFIER_nondet_float() {
+  return 0;
+}
+
+double __VERIFIER_nondet_double() {
+  return 0;
+}
+
+unsigned short __VERIFIER_nondet_unsigned_short() {
+  return 0;
+}
+
 void __SMACK_code(const char* fmt, ...) {
   return;
 }
@@ -28,10 +40,36 @@ RES f16_ ## pred(f16 x, f16 y) {\
   return ret;\
 }
 
+f16 f32_to_u16(float x) {
+  f16 ret = __VERIFIER_nondet_unsigned_short();
+  __SMACK_code("assume $bitcast.bv16.bvhalf(@H) == $fptrunc.bvfloat.bvhalf($rmode, @f);", ret, x);
+  return ret;
+}
+
+f16 f64_to_u16(float x) {
+  f16 ret = __VERIFIER_nondet_unsigned_short();
+  __SMACK_code("assume $bitcast.bv16.bvhalf(@H) == $fptrunc.bvdouble.bvhalf($rmode, @);", ret, x);
+  return ret;
+}
+
+float f16_to_f32(f16 x) {
+  float ret = __VERIFIER_nondet_float();
+  __SMACK_code("@f := $fpext.bvhalf.bvfloat($rmode, $bitcast.bv16.bvhalf(@h));", ret, x);
+  return ret;
+}
+
+double f16_to_f64(f16 x) {
+  double ret = __VERIFIER_nondet_double();
+  __SMACK_code("@ := $fpext.bvhalf.bvdouble($rmode, $bitcast.bv16.bvhalf(@h));", ret, x);
+  return ret;
+}
+
+
 DEF_PRED(lt)
 DEF_PRED(gt)
 DEF_PRED(le)
 DEF_PRED(ge)
+DEF_PRED(eq)
 
 /*int main(void) {
   __VERIFIER_assert(f16_lt(0,16384) == 0);
